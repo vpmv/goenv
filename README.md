@@ -1,7 +1,7 @@
 Go Environment Helper
 ---
 
-[![Code Coverage](https://codecov.io/gh/vpmv/goenv/graph/badge.svg)](https://codecov.io/gh/vpmv/goenv)
+[![Code Coverage](https://codecov.io/gh/vpmv/go-env/graph/badge.svg)](https://codecov.io/gh/vpmv/go-env)
 
 This package provides a simple way to load environment variables from .env and .ini files into your Go application, and an atomic API to read and write environment variables.
 
@@ -58,7 +58,7 @@ You can inject variables using the `Set()` function. This supports all aforement
 package main
 
 import (
-    env "github.com/vpmv/goenv"	
+    "github.com/vpmv/go-env"	
 )
 
 func main() {
@@ -90,7 +90,7 @@ import (
 	"fmt"
 
 	"github.com/go-fuego/fuego"
-	env "github.com/vpmv/goenv"
+	"github.com/vpmv/go-env"
 )
 
 func main() {
@@ -111,7 +111,7 @@ func main() {
 package main
 
 import (
-	env "github.com/vpmv/goenv"
+	"github.com/vpmv/go-env"
 )
 
 type Config struct {
@@ -147,7 +147,7 @@ func main() {
 package main
 
 import (
-	env "github.com/vpmv/goenv"
+	"github.com/vpmv/go-env"
 )
 
 func main() {
