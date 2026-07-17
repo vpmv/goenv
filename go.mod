@@ -1,4 +1,4 @@
-module github.com/vpmv/goenv
+module github.com/vpmv/go-env
 
 go 1.26.5
 
