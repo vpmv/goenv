@@ -4,6 +4,14 @@ import (
 	"os"
 )
 
+// Slice-type word-separation delimiter
+var delimiter = ";"
+
+// SetDelimiter sets the delimiter used in slice-types
+func SetDelimiter(d string) {
+	delimiter = d
+}
+
 type Environment string
 
 func (e Environment) String() string {

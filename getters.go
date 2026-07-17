@@ -4,7 +4,14 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
+
+// Has checks if the environment variable exists
+func Has(key string) bool {
+	_, ok := os.LookupEnv(key)
+	return ok
+}
 
 // GetString - get string with default fallback
 func GetString(key, defaultValue string) string {
@@ -62,6 +69,35 @@ func GetBool(key string, defaultValue bool) bool {
 	return b
 }
 
+// GetStringSlice - get string slice with default fallback
+func GetStringSlice(key string, defaultValue []string) []string {
+	v := os.Getenv(key)
+	if v == `` {
+		return defaultValue
+	}
+
+	s := strings.Split(v, delimiter)
+	return s
+}
+
+// GetIntSlice - get int slice with default fallback
+//
+// may produce zero-values when unable to convert
+func GetIntSlice(key string, defaultValue []int) []int {
+	v := os.Getenv(key)
+	if v == `` {
+		return defaultValue
+	}
+
+	s := strings.Split(v, delimiter)
+	o := make([]int, len(s))
+	for i := range s {
+		iv, _ := strconv.Atoi(s[i])
+		o[i] = iv
+	}
+	return o
+}
+
 // MustString - get string or panic
 func MustString(key string) string {
 	v := os.Getenv(key)
@@ -104,4 +140,24 @@ func MustBool(key string) bool {
 		panic(fmt.Sprintf(`Invalid boolean value for environment variable: %s`, key))
 	}
 	return b
+}
+
+// MustStringSlice - get string slice or panic
+func MustStringSlice(key string) []string {
+	v := MustString(key)
+	return strings.Split(v, delimiter)
+}
+
+// MustIntSlice - get integer slice or panic
+func MustIntSlice(key string) []int {
+	v := MustStringSlice(key)
+	o := make([]int, len(v))
+	for i := range v {
+		iv, err := strconv.Atoi(v[i])
+		if err != nil {
+			panic(fmt.Sprintf(`Invalid integer value for environment variable: %s`, key))
+		}
+		o[i] = iv
+	}
+	return o
 }

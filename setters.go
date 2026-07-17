@@ -2,31 +2,36 @@ package env
 
 import (
 	"os"
+	"reflect"
 	"strconv"
+	"strings"
 )
 
 type BasicType interface {
-	~string | ~int | ~float64 | ~uint64 | ~bool
+	~string | ~int | ~float64 | ~uint64 | ~bool | ~[]string | ~[]int
 }
 
 // Set will convert all basic types to string and set the environment variable
 func Set[T BasicType](key string, value T) {
-	var s string
+	var (
+		s string
+		v = reflect.ValueOf(value)
+	)
 
-	switch any(value).(type) {
-	case string:
-		s = any(value).(string)
-	case int:
-		s = strconv.Itoa(any(value).(int))
-	case float64:
-		s = strconv.FormatFloat(any(value).(float64), 'f', -1, 64) // no trailing zeros
-	case uint64:
-		s = strconv.FormatUint(any(value).(uint64), 10)
-	case bool:
-		s = strconv.FormatBool(any(value).(bool))
+	switch v.Kind() {
 	default:
-		// Should be unreachable due to the constraint
-		s = strconv.FormatUint(0, 10)
+	case reflect.String:
+		s = v.String()
+	case reflect.Int:
+		s = strconv.Itoa(int(v.Int()))
+	case reflect.Float64:
+		s = strconv.FormatFloat(v.Float(), 'f', -1, 64) // no trailing zeros
+	case reflect.Uint64:
+		s = strconv.FormatUint(v.Uint(), 10)
+	case reflect.Bool:
+		s = strconv.FormatBool(v.Bool())
+	case reflect.Slice:
+		s = strings.Join(v.Slice(0, v.Len()).Interface().([]string), delimiter)
 	}
 
 	_ = os.Setenv(key, s)
